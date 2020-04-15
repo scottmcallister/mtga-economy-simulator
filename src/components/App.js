@@ -1,116 +1,69 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled'
 import {
-  initializeRareCollection,
-  countRares
-} from '../utils/simulation';
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import Simulator from './simulator';
+import Charts from './charts';
+import Tables from './tables';
 
-const Grid = styled.div({
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center'
+const List = styled.ul({
+  listStyleType: 'none',
+  margin: 0,
+  padding: 0,
+  position: 'fixed',
+  top: 0,
+  width: '100%',
+  background: '#444444'
 });
-const Card = styled.div({
-  flexBasis: '300px',
-  flexGrow: 1,
-  margin: '10px 10px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  padding: '20px',
-  height: '100px',
-  borderRadius: '10px',
-  color: '#FEFEFC',
-  backgroundColor: '#4D4F4E'
+const ListItem = styled.li({
+  display: 'inline',
+  float: 'left'
 });
-const MenuItem = styled.div({
-  flexBasis: '300px',
-  flexGrow: 1,
-  margin: '10px 10px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-evenly',
-  flexDirection: 'column',
-  padding: '20px',
-  height: '100px',
-  borderRadius: '10px',
-  color: '#FEFEFC',
-  flexShrink: 0,
-  backgroundColor: '#324666'
-});
-const SubmitButton = styled.button({
-  backgroundColor: 'darkorange',
-  color: "#FEFEFC",
-  borderRadius: '5px',
-  padding: '8px',
-  border: 'none'
-});
-const ResetButton = styled.button({
-  backgroundColor: '#6493de',
-  color: "#FEFEFC",
-  borderRadius: '5px',
-  padding: '8px',
-  border: 'none'
+const Content = styled.div({
+  paddingTop: '60px'
 });
 
 function App() {
-  const [gold, setGold] = useState(100000);
-  const [gems, setGems] = useState(0);
-  const [packs, setPacks] = useState(0);
-  const [wildcards, setWildcards] = useState(0);
-  const [rares, setRares] = useState(initializeRareCollection());
-  const [wcCounter, setWcCounter] = useState(0);
-  const [winRate, setWinrate] = useState(0.5);
 
-  const Wrapper = styled.div({
-    fontFamily: 'arial',
-    backgroundColor: '#272C2F'
-  })
-  
   return (
-    <Wrapper>
-      <Grid>
-        <Card>
-          <div>Gold</div>
-          <div>{gold}</div>
-        </Card>
-        <Card>
-          <div>Gems</div>
-          <div>{gems}</div>
-        </Card>
-        <Card>
-          <div>Wildcards</div>
-          <div>{wildcards}</div>
-        </Card>
-        <Card>
-          <div>Wildcard Counter</div>
-          <div>{wcCounter}/6</div>
-        </Card>
-        <Card>
-          <div>Packs</div>
-          <div>{packs}</div>
-        </Card>
-        <Card>
-          <div>Rares</div>
-          <div>{countRares(rares)}</div>
-        </Card>
-      </Grid>
-      <Grid>
-        <MenuItem>
-          <SubmitButton>Buy Pack</SubmitButton>
-        </MenuItem>
-        <MenuItem>
-          <SubmitButton>Open Pack</SubmitButton>
-        </MenuItem>
-        <MenuItem>
-          <SubmitButton>Draft</SubmitButton>
-        </MenuItem>
-        <MenuItem>
-          <ResetButton>Reset</ResetButton>
-        </MenuItem>
-      </Grid>
-    </Wrapper>
-  );
+    <Router>
+      <div>
+        <nav>
+          <List>
+            <ListItem>
+              <Link to="/" className='navLink'>Simulator</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/charts" className='navLink'>Charts</Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/tables" className='navLink'>Tables</Link>
+            </ListItem>
+          </List>
+        </nav>
+
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Content>
+          <Switch>
+            <Route path="/charts">
+              <Charts />
+            </Route>
+            <Route path="/tables">
+              <Tables />
+            </Route>
+            <Route path="/">
+              <Simulator />
+            </Route>
+          </Switch>
+        </Content>
+      </div>
+    </Router>
+  )
 }
 
 export default App;
