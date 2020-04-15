@@ -27,6 +27,10 @@ export const getTraditionalWinProbability = (winRate, numWins) => {
   return undefined;
 }
 
+export const getTraditionalDraftWinProbability = (winRate, numWins) => {
+  return getBinomialDistribution(winRate, 3, numWins);
+}
+
 export const simulateRankedEvent = (winRate) => {
   const randomNumber = Math.round(Math.random() * 1000);
   const noWinCutoff = getRankedWinProbability(winRate, 0) * 1000;
@@ -67,11 +71,25 @@ export const simulateTraditionalEvent = (winRate) => {
   return 5;
 }
 
-export const estimateRankedPayout = (winRate, payoutMap) => {
+export const simulateTraditionalDraft = (winRate) => {
+  const randomNumber = Math.round(Math.random() * 1000);
+  const noWinCutoff = getTraditionalDraftWinProbability(winRate, 0) * 1000;
+  const oneWinCutoff = noWinCutoff + (getTraditionalDraftWinProbability(winRate, 1) * 1000);
+  const twoWinCutoff = oneWinCutoff + (getTraditionalDraftWinProbability(winRate, 2) * 1000);
+  if (noWinCutoff === 0) {
+    return 3;
+  }
+  if (randomNumber <= noWinCutoff) return 0;
+  if (randomNumber <= oneWinCutoff) return 1;
+  if (randomNumber <= twoWinCutoff) return 2;
+  return 3;
+}
+
+const estimatePayout = (winRate, payoutMap, probabilityFunction) => {
   return payoutMap.map((payoutEntry, wins) => {
     let newPayout = {};
     for(let key in payoutEntry) {
-      newPayout[key] = payoutEntry[key] * getRankedWinProbability(winRate, wins);
+      newPayout[key] = payoutEntry[key] * probabilityFunction(winRate, wins);
     }
     return newPayout;
   }).reduce((accumulator, currentPayout) => {
@@ -83,20 +101,16 @@ export const estimateRankedPayout = (winRate, payoutMap) => {
   });
 }
 
+export const estimateRankedPayout = (winRate, payoutMap) => {
+  return estimatePayout(winRate, payoutMap, getRankedWinProbability);
+}
+
 export const estimateTraditionalPayout = (winRate, payoutMap) => {
-  return payoutMap.map((payoutEntry, wins) => {
-    let newPayout = {};
-    for(let key in payoutEntry) {
-      newPayout[key] = payoutEntry[key] * getTraditionalWinProbability(winRate, wins);
-    }
-    return newPayout;
-  }).reduce((accumulator, currentPayout) => {
-    let newPayout = accumulator;
-    for(let key in accumulator) {
-      newPayout[key] = accumulator[key] + currentPayout[key];
-    }
-    return newPayout;
-  });
+  return estimatePayout(winRate, payoutMap, getTraditionalWinProbability);
+}
+
+export const estimateTraditionalDraftPayout = (winRate, payoutMap) => {
+  return estimatePayout(winRate, payoutMap, getTraditionalDraftWinProbability);
 }
 
 export const initializeRareCollection = () => {

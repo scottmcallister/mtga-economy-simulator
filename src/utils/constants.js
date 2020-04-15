@@ -9,13 +9,22 @@ export const rankedDraftPayouts = [
   { packs: 2, gems: 950 }
 ];
 
+export const premierDraftPayouts = [
+  { packs: 1, gems: 50 },
+  { packs: 1, gems: 100 },
+  { packs: 2, gems: 250 },
+  { packs: 2, gems: 1000 },
+  { packs: 3, gems: 1400 },
+  { packs: 4, gems: 1600 },
+  { packs: 5, gems: 1800 },
+  { packs: 6, gems: 2200 }
+];
+
 export const traditionalDraftPayouts = [
   { packs: 1, gems: 0 },
-  { packs: 2, gems: 0 },
-  { packs: 3, gems: 800 },
-  { packs: 4, gems: 1500 },
-  { packs: 5, gems: 1800 },
-  { packs: 6, gems: 2100 }
+  { packs: 1, gems: 0 },
+  { packs: 4, gems: 1000 },
+  { packs: 6, gems: 3000 }
 ];
 
 export const rankedConstructedPayouts = [

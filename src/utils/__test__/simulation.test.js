@@ -1,6 +1,7 @@
 import {
   getRankedWinProbability,
   getTraditionalWinProbability,
+  getTraditionalDraftWinProbability,
   simulateRankedEvent,
   simulateTraditionalEvent,
   estimateRankedPayout,
@@ -13,7 +14,8 @@ import {
   rankedDraftPayouts,
   traditionalDraftPayouts,
   rankedConstructedPayouts,
-  traditionalConstructedPayouts
+  traditionalConstructedPayouts,
+  premierDraftPayouts
 } from '../constants';
 
 
@@ -42,7 +44,7 @@ test('gets ranked win probability', () => {
   expect(wins).toEqual(expectedWins);
 });
 
-test('gets traditional win probability', () => {
+test('gets traditional constructed win probability', () => {
   const winRate = 0.5;
   const wins = [
     getTraditionalWinProbability(winRate, 0),
@@ -60,6 +62,18 @@ test('gets traditional win probability', () => {
     0.078125,
     0.109375
   ];
+  expect(wins).toEqual(expectedWins);
+});
+
+test('gets traditional draft win probability', () => {
+  const winRate = 0.5;
+  const wins = [
+    getTraditionalDraftWinProbability(winRate, 0),
+    getTraditionalDraftWinProbability(winRate, 1),
+    getTraditionalDraftWinProbability(winRate, 2),
+    getTraditionalDraftWinProbability(winRate, 3)
+  ];
+  const expectedWins = [ 0.125, 0.375, 0.375, 0.125 ];
   expect(wins).toEqual(expectedWins);
 });
 
@@ -107,8 +121,8 @@ test('estimate ranked draft payout', () => {
 
 test('estimate traditional draft payout', () => {
   const traditionalDraftPayout = estimateTraditionalPayout(0.5, traditionalDraftPayouts);
-  expect(Math.round(traditionalDraftPayout.packs)).toEqual(3);
-  expect(Math.round(traditionalDraftPayout.gems)).toEqual(708);
+  expect(Math.round(traditionalDraftPayout.packs)).toEqual(2);
+  expect(Math.round(traditionalDraftPayout.gems)).toEqual(563);
 });
 
 test('estimate ranked constructed payout', () => {
@@ -121,6 +135,12 @@ test('estimate traditional constructed payout', () => {
   const traditionalConstructedPayout = estimateTraditionalPayout(0.5, traditionalConstructedPayouts);
   expect(Math.round(traditionalConstructedPayout.gold)).toEqual(863);
   expect(Math.round(traditionalConstructedPayout.rares)).toEqual(0);
+});
+
+test('estimate premier draft bo1 payout', () => {
+  const premierDraftPayout = estimateRankedPayout(0.5, premierDraftPayouts);
+  expect(Math.round(premierDraftPayout.packs)).toEqual(2);
+  expect(Math.round(premierDraftPayout.gems)).toEqual(820);
 });
 
 test('add rares to collection', () => {
