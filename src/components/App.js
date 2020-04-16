@@ -35,29 +35,20 @@ function App() {
         <nav>
           <List>
             <ListItem>
-              <Link to="/" className='navLink'>Simulator</Link>
-            </ListItem>
-            <ListItem>
-              <Link to="/charts" className='navLink'>Charts</Link>
+              <Link to="/" className='navLink'>Charts</Link>
             </ListItem>
             <ListItem>
               <Link to="/tables" className='navLink'>Tables</Link>
             </ListItem>
           </List>
         </nav>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <Content>
           <Switch>
-            <Route path="/charts">
-              <Charts />
-            </Route>
             <Route path="/tables">
               <Tables />
             </Route>
             <Route path="/">
-              <Simulator />
+              <Charts />
             </Route>
           </Switch>
         </Content>
