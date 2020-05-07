@@ -23,7 +23,7 @@ const radioStyles = {
 };
 const data = [
   {
-    name: '0%', gems: 2400,
+    name: '0%', gems: 2400, 
   },
   {
     name: '10%', gems: 1398,
@@ -76,7 +76,8 @@ const makeData = format => {
   for (let i = 0; i <= 10; i++) {
     const newData = {
       name: `${i * 10}%`,
-      gems: estimateFunc((i / 10), payoutMap).gems
+      gems: estimateFunc((i / 10), payoutMap).gems,
+      packs: estimateFunc((i / 10), payoutMap).packs
     }
     data.push(newData);
   }
@@ -87,6 +88,7 @@ const Charts = () => {
   const [format, setFormat] = useState('quickDraft');
   const handleOptionChange = e => setFormat(e.target.value);
   const data = makeData(format);
+  console.log(data);
   return (
     <div>
       <div>
@@ -104,6 +106,23 @@ const Charts = () => {
           <Tooltip />
           <Legend verticalAlign="top" height={36} />
           <Line type="monotone" dataKey="gems" stroke="#8884d8" activeDot={{ r: 8 }} />
+        </LineChart>
+      </div>
+      <div>
+        <LineChart
+          width={550}
+          height={300}
+          data={data}
+          margin={{
+            top: 5, right: 30, left: 20, bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name"/>
+          <YAxis />
+          <Tooltip />
+          <Legend verticalAlign="top" height={36} />
+          <Line type="monotone" dataKey="packs" stroke="#F47C44" activeDot={{ r: 8 }} />
         </LineChart>
       </div>
       <form>
